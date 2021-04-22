@@ -13,7 +13,7 @@ public class RacedataApplication {
 	@RequestMapping("/")
 	@ResponseBody
 	String home() {
-		return "Hello World!";
+		return "Hello New Auto-Deployed World!";
 	}
 
 	public static void main(String[] args) {
