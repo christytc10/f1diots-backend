@@ -53,6 +53,7 @@ public class RaceDataApplication {
 
     @GetMapping(path = "/populate")
     String populate() {
+        cachedRaceData = null;
         ftpPuller.pullServerResults();
         return "OK";
     }
