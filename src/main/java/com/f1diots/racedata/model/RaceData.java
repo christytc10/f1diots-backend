@@ -7,6 +7,9 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.springframework.data.annotation.Id;
 
+import java.time.Instant;
+import java.util.List;
+
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
@@ -15,8 +18,12 @@ import org.springframework.data.annotation.Id;
 public class RaceData {
     @Id
     private String id;
+    private Instant timestamp;
 
     private String trackName;
     private String sessionType;
     private SessionResult sessionResult;
+    private List<Lap> laps;
+    //penalties
+    //post-race penalties
 }

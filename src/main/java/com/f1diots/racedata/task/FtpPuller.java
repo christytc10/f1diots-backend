@@ -1,12 +1,14 @@
 package com.f1diots.racedata.task;
 
 import com.f1diots.racedata.db.RaceDataRepository;
+import com.f1diots.racedata.model.AccCar;
 import com.f1diots.racedata.model.RaceData;
 import com.fasterxml.jackson.annotation.JsonAutoDetect;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.introspect.VisibilityChecker;
+import lombok.SneakyThrows;
 import lombok.extern.log4j.Log4j2;
 import org.apache.commons.net.ftp.FTPClient;
 import org.apache.commons.net.ftp.FTPFile;
@@ -18,13 +20,21 @@ import org.springframework.stereotype.Component;
 import java.io.BufferedReader;
 import java.io.InputStream;
 import java.io.InputStreamReader;
-import java.util.HashMap;
-import java.util.Map;
+import java.text.SimpleDateFormat;
+import java.time.Instant;
+import java.time.format.DateTimeFormatter;
+import java.time.format.DateTimeFormatterBuilder;
+import java.time.temporal.ChronoUnit;
+import java.time.temporal.TemporalAccessor;
+import java.time.temporal.TemporalField;
+import java.util.*;
 import java.util.stream.Collectors;
 
 @Component
 @Log4j2
 public class FtpPuller {
+
+    public static final SimpleDateFormat DATE_FORMAT = new SimpleDateFormat("yyMMdd_mmhhss");
 
     @Value("${race.data.ftp.url}")
     String ftpUrl;
@@ -42,7 +52,13 @@ public class FtpPuller {
     @Autowired
     RaceDataRepository raceDataDb;
 
+    Set<String> knownIds = new HashSet<>();
+
+    @Scheduled(fixedRate = 60000 * 5) //Every 5 minutes
     public void pullServerResults() {
+        if(knownIds.isEmpty()) {
+            populateIdCache();
+        }
         mapper.disable(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES);
         mapper.setVisibility(VisibilityChecker.Std.defaultInstance().withFieldVisibility(JsonAutoDetect.Visibility.ANY));
         log.info("Running scheduled task");
@@ -52,12 +68,37 @@ public class FtpPuller {
             try {
                 serverRaceData = mapper.readValue(raceData.get(k), RaceData.class);
                 serverRaceData.setId(k);
-                RaceData savedUserMono = raceDataDb.save(serverRaceData).block();
-                log.info(savedUserMono);
+                serverRaceData.setTimestamp(parseTimestamp(k));
+
+                serverRaceData.getSessionResult().getLeaderBoardLines().forEach(leaderBoardLine -> {
+                    int carModel = leaderBoardLine.getCar().getCarModel();
+                    //TODO - fix deserialising this car enum. Would be nice
+                    //leaderBoardLine.getCar().setCarDetails(AccCar.byId(carModel));
+                });
+                raceDataDb.save(serverRaceData).block();
+                knownIds.add(k);
             } catch (JsonProcessingException e) {
                 e.printStackTrace();
             }
         });
+    }
+
+    @SneakyThrows
+    private Instant parseTimestamp(String fileId) {
+        //Example fileId: 210422_232210_FP
+        String dateString = fileId.substring(0, fileId.lastIndexOf("_"));
+        return DATE_FORMAT.parse(dateString).toInstant();
+    }
+
+    private void populateIdCache() {
+        log.info("Refreshing IDs from DB");
+        Set<String> idsFromDb = Objects.requireNonNull(raceDataDb.getSessionIds()
+                .collectList()
+                .block())
+                .stream()
+                .map(RaceData::getId)
+                .collect(Collectors.toSet());
+        knownIds.addAll(idsFromDb);
     }
 
     private Map<String, String> getRaceDataFromFtp() {
@@ -70,15 +111,21 @@ public class FtpPuller {
 
             FTPFile[] fileList = ftpClient.listFiles(remoteDir);
             for (FTPFile ftpFile : fileList) {
-                try {
+
                     String filename = ftpFile.getName();
+                    String id = filename.substring(0, filename.lastIndexOf("."));
                     if (!filename.substring(filename.lastIndexOf(".")).equals(".json")) {
                         // ignore any non-json files
                         continue;
                     }
+                    if(knownIds.contains(id)){
+                        log.info("{} already in DB", id);
+                        //continue; //FIXME - remove
+                    }
+                    log.info("{} not in DB, saving...", id);
+                try {
                     InputStream stream = ftpClient.retrieveFileStream(remoteDir + filename);
                     String result = new BufferedReader(new InputStreamReader(stream)).lines().collect(Collectors.joining(""));
-                    String id = filename.substring(0, filename.lastIndexOf("."));
                     raceData.put(id, result.replaceAll("[\\x00-\\x09\\x11\\x12\\x14-\\x1F\\x7F]", ""));
                 } finally {
                     ftpClient.completePendingCommand();

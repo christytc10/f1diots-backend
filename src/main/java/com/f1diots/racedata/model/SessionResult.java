@@ -6,6 +6,8 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.util.List;
+
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
@@ -15,4 +17,6 @@ public class SessionResult {
     private Long bestLap;
 
     private Long[] bestSplits;
+    private boolean wet;
+    private List<LeaderBoardLine> leaderBoardLines;
 }

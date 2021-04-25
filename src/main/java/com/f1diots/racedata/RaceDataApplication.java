@@ -11,10 +11,7 @@ import org.springframework.cache.annotation.Cacheable;
 import org.springframework.cache.annotation.EnableCaching;
 import org.springframework.http.MediaType;
 import org.springframework.scheduling.annotation.EnableScheduling;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.ResponseBody;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
@@ -40,22 +37,17 @@ public class RaceDataApplication {
     }
 
     @GetMapping(path = "/raceData", produces = MediaType.APPLICATION_JSON_VALUE)
-    List<RaceData> raceData() {
-        if(cachedRaceData != null){
-            log.info("Returning Cached Race Data");
-            return cachedRaceData;
-        }
+    List<RaceData> raceData(@RequestParam(defaultValue = "10") Integer limit, @RequestParam(defaultValue = "0") Integer offset) {
         log.info("Missed cache. Getting Race Data From DB");
-        List<RaceData> raceData = raceDataDb.findAll().collectList().block();
+        List<RaceData> raceData = raceDataDb.getSessions(limit, offset).collectList().block();
         cachedRaceData = raceData;
         return raceData;
     }
 
-    @GetMapping(path = "/populate")
-    String populate() {
-        cachedRaceData = null;
-        ftpPuller.pullServerResults();
-        return "OK";
+    @GetMapping(path = "/raceData/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
+    RaceData raceData(@PathVariable String id) {
+        log.info("Missed cache. Getting Race Data From DB");
+        return raceDataDb.findById(id).block();
     }
 
     public static void main(String[] args) {
