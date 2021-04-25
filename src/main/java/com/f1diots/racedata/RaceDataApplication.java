@@ -13,6 +13,7 @@ import org.springframework.http.MediaType;
 import org.springframework.scheduling.annotation.EnableScheduling;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -29,7 +30,7 @@ public class RaceDataApplication {
     @Autowired
     private FtpPuller ftpPuller;
 
-    private Map<String, RaceData> cachedRaceData;
+    private Map<String, RaceData> cachedRaceData = new HashMap<>();
 
     @RequestMapping("/")
     @ResponseBody
