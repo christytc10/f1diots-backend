@@ -120,7 +120,7 @@ public class FtpPuller {
                     }
                     if(knownIds.contains(id)){
                         log.info("{} already in DB", id);
-                        //continue; //FIXME - remove
+                        continue;
                     }
                     log.info("{} not in DB, saving...", id);
                 try {
