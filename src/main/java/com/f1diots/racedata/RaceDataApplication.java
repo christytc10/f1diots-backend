@@ -14,6 +14,7 @@ import org.springframework.scheduling.annotation.EnableScheduling;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Map;
 
 @Log4j2
 @RestController
@@ -28,7 +29,7 @@ public class RaceDataApplication {
     @Autowired
     private FtpPuller ftpPuller;
 
-    private List<RaceData> cachedRaceData;
+    private Map<String, RaceData> cachedRaceData;
 
     @RequestMapping("/")
     @ResponseBody
@@ -38,16 +39,19 @@ public class RaceDataApplication {
 
     @GetMapping(path = "/raceData", produces = MediaType.APPLICATION_JSON_VALUE)
     List<RaceData> raceData(@RequestParam(defaultValue = "10") Integer limit, @RequestParam(defaultValue = "0") Integer offset) {
-        log.info("Missed cache. Getting Race Data From DB");
-        List<RaceData> raceData = raceDataDb.getSessions(limit, offset).collectList().block();
-        cachedRaceData = raceData;
-        return raceData;
+        return raceDataDb.getSessions(limit, offset).collectList().block();
     }
 
     @GetMapping(path = "/raceData/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
-    RaceData raceData(@PathVariable String id) {
+    RaceData raceDataById(@PathVariable String id) {
+        if (cachedRaceData.containsKey(id)){
+            log.info("Hit cache. Returning Race Data for {} From cache", id);
+            return cachedRaceData.get(id);
+        }
         log.info("Missed cache. Getting Race Data From DB");
-        return raceDataDb.findById(id).block();
+        RaceData raceData = raceDataDb.findById(id).block();
+        cachedRaceData.putIfAbsent(id, raceData);
+        return raceData;
     }
 
     public static void main(String[] args) {
