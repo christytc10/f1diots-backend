@@ -1,7 +1,6 @@
 package com.f1diots.racedata.task;
 
 import com.f1diots.racedata.db.RaceDataRepository;
-import com.f1diots.racedata.model.AccCar;
 import com.f1diots.racedata.model.RaceData;
 import com.fasterxml.jackson.annotation.JsonAutoDetect;
 import com.fasterxml.jackson.core.JsonProcessingException;
@@ -22,11 +21,6 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.text.SimpleDateFormat;
 import java.time.Instant;
-import java.time.format.DateTimeFormatter;
-import java.time.format.DateTimeFormatterBuilder;
-import java.time.temporal.ChronoUnit;
-import java.time.temporal.TemporalAccessor;
-import java.time.temporal.TemporalField;
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -34,7 +28,7 @@ import java.util.stream.Collectors;
 @Log4j2
 public class FtpPuller {
 
-    public static final SimpleDateFormat DATE_FORMAT = new SimpleDateFormat("yyMMdd_mmhhss");
+    public static final SimpleDateFormat DATE_FORMAT = new SimpleDateFormat("yyMMdd_hhmmss");
 
     @Value("${race.data.ftp.url}")
     String ftpUrl;
@@ -120,7 +114,7 @@ public class FtpPuller {
                     }
                     if(knownIds.contains(id)){
                         log.info("{} already in DB", id);
-                        continue;
+                        //continue;
                     }
                     log.info("{} not in DB, saving...", id);
                 try {

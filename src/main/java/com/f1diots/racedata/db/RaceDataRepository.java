@@ -6,9 +6,6 @@ import com.f1diots.racedata.model.RaceData;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 import reactor.core.publisher.Flux;
-import reactor.core.publisher.Mono;
-
-import java.util.List;
 
 @Repository
 public interface RaceDataRepository extends ReactiveCosmosRepository<RaceData, String> {
