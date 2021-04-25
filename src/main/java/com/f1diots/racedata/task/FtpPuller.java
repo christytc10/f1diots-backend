@@ -1,6 +1,7 @@
 package com.f1diots.racedata.task;
 
 import com.f1diots.racedata.db.RaceDataRepository;
+import com.f1diots.racedata.model.AccCar;
 import com.f1diots.racedata.model.RaceData;
 import com.fasterxml.jackson.annotation.JsonAutoDetect;
 import com.fasterxml.jackson.core.JsonProcessingException;
@@ -67,7 +68,7 @@ public class FtpPuller {
                 serverRaceData.getSessionResult().getLeaderBoardLines().forEach(leaderBoardLine -> {
                     int carModel = leaderBoardLine.getCar().getCarModel();
                     //TODO - fix deserialising this car enum. Would be nice
-                    //leaderBoardLine.getCar().setCarDetails(AccCar.byId(carModel));
+                    leaderBoardLine.getCar().setCarDetails(AccCar.byId(carModel));
                 });
                 raceDataDb.save(serverRaceData).block();
                 knownIds.add(k);

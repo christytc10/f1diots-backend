@@ -1,10 +1,14 @@
 package com.f1diots.racedata.model;
 
+import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 @Getter
 @NoArgsConstructor
+@JsonSerialize(using = AccCarSerializer.class)
+@JsonDeserialize(using = AccCarDeserializer.class)
 public enum AccCar {
     //TODO - fix these enum names properly
     PORSCHE_991_GT3R("Porsche 991 GT3 R",2018,"GT3",0),
