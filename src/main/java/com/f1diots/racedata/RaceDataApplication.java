@@ -1,6 +1,7 @@
 package com.f1diots.racedata;
 
 import com.f1diots.racedata.db.RaceDataRepository;
+import com.f1diots.racedata.model.AccCar;
 import com.f1diots.racedata.model.RaceData;
 import com.f1diots.racedata.task.FtpPuller;
 import lombok.extern.log4j.Log4j2;
@@ -44,6 +45,19 @@ public class RaceDataApplication {
 
     @GetMapping(path = "/raceData/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
     RaceData raceDataById(@PathVariable String id) {
+        RaceData raceData = getRaceData(id);
+        decorateRaceData(raceData);
+        return raceData;
+    }
+
+    private void decorateRaceData(RaceData raceData) {
+        raceData.getSessionResult().getLeaderBoardLines().forEach(leaderBoardLine -> {
+            int carModel = leaderBoardLine.getCar().getCarModel();
+            leaderBoardLine.getCar().setCarDetails(AccCar.byId(carModel));
+        });
+    }
+
+    private RaceData getRaceData(String id) {
         if (cachedRaceData.containsKey(id)){
             log.info("Hit cache. Returning Race Data for {} From cache", id);
             return cachedRaceData.get(id);
