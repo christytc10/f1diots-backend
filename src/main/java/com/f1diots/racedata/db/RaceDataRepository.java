@@ -13,6 +13,7 @@ public interface RaceDataRepository extends ReactiveCosmosRepository<RaceData, S
     Flux<RaceData> getSessionIds();
 
     @Query(value = "SELECT c.id, c.timestamp, c.trackName, c.sessionType from c " +
+            "WHERE ARRAY_LENGTH(c.laps) > 0 " +
             "ORDER by c.timestamp " +
             "DESC OFFSET @offset " +
             "LIMIT @limit")
