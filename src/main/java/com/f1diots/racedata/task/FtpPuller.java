@@ -62,15 +62,13 @@ public class FtpPuller {
             RaceData serverRaceData;
             try {
                 serverRaceData = mapper.readValue(raceData.get(k), RaceData.class);
-                serverRaceData.setId(k);
-                serverRaceData.setTimestamp(parseTimestamp(k));
-
-                serverRaceData.getSessionResult().getLeaderBoardLines().forEach(leaderBoardLine -> {
-                    int carModel = leaderBoardLine.getCar().getCarModel();
-                    //TODO - fix deserialising this car enum. Would be nice
-                    leaderBoardLine.getCar().setCarDetails(AccCar.byId(carModel));
-                });
-                raceDataDb.save(serverRaceData).block();
+                if(!serverRaceData.getLaps().isEmpty()) {
+                    serverRaceData.setId(k);
+                    serverRaceData.setTimestamp(parseTimestamp(k));
+                    raceDataDb.save(serverRaceData).block();
+                } else {
+                    log.info("Session {} was empty.", k);
+                }
                 knownIds.add(k);
             } catch (JsonProcessingException e) {
                 e.printStackTrace();
