@@ -1,6 +1,5 @@
 package com.f1diots.racedata;
 
-import com.f1diots.racedata.db.RaceDataRepository;
 import com.f1diots.racedata.model.AccCar;
 import com.f1diots.racedata.model.RaceData;
 import com.f1diots.racedata.task.FtpPuller;
@@ -24,8 +23,8 @@ import java.util.Map;
 @SpringBootApplication
 public class RaceDataApplication {
 
-    @Autowired
-    private RaceDataRepository raceDataDb;
+    //@Autowired
+    //private RaceDataRepository raceDataDb;
 
     @Autowired
     private FtpPuller ftpPuller;
@@ -40,7 +39,8 @@ public class RaceDataApplication {
 
     @GetMapping(path = "/raceData", produces = MediaType.APPLICATION_JSON_VALUE)
     List<RaceData> raceData(@RequestParam(defaultValue = "10") Integer limit, @RequestParam(defaultValue = "0") Integer offset) {
-        return raceDataDb.getSessions(limit, offset).collectList().block();
+        //return raceDataDb.getSessions(limit, offset).collectList().block();
+        return null;
     }
 
     @GetMapping(path = "/raceData/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
@@ -63,9 +63,10 @@ public class RaceDataApplication {
             return cachedRaceData.get(id);
         }
         log.info("Missed cache. Getting Race Data From DB");
-        RaceData raceData = raceDataDb.findById(id).block();
-        cachedRaceData.putIfAbsent(id, raceData);
-        return raceData;
+        //RaceData raceData = raceDataDb.findById(id).block();
+        //cachedRaceData.putIfAbsent(id, raceData);
+        //return raceData;
+        return null;
     }
 
     public static void main(String[] args) {

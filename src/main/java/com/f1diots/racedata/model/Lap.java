@@ -1,6 +1,5 @@
 package com.f1diots.racedata.model;
 
-import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -16,7 +15,6 @@ public class Lap {
     private Long carId;
     private Long driverIndex;
     private Long laptime;
-    @JsonProperty("isValidForBest")
     private Boolean validForBest;
     private List<Long> splits;
 }
