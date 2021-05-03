@@ -12,7 +12,7 @@ import java.util.List;
 @AllArgsConstructor
 @Data
 public class  Car {
-    private int carId;
+    private Long carId;
     private int raceNumber;
     private AccCar carDetails;
     private int carModel;
