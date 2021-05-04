@@ -21,12 +21,8 @@ public class Lap {
     private Long id;
     private Long carId;
     private Long driverIndex;
-    private Long laptime;
+    private Long lapTime;
     @JsonProperty("isValidForBest")
     private Boolean validForBest;
-    @ManyToOne
-    private RaceSession raceSession;
-
-
     //private List<Long> splits; //TODO - need a whole table for lap splits?
 }

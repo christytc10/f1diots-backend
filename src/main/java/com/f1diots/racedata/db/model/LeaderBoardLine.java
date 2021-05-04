@@ -19,8 +19,6 @@ public class LeaderBoardLine {
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
 
-    @OneToOne
+    @OneToOne(cascade = {CascadeType.ALL})
     private SessionCar car;
-    @OneToMany
-    private List<Lap> laps;
 }

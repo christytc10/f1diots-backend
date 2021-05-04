@@ -1,4 +1,4 @@
-package com.f1diots.racedata.model;
+package com.f1diots.racedata.task.model;
 
 import com.fasterxml.jackson.core.JsonParser;
 import com.fasterxml.jackson.core.JsonProcessingException;

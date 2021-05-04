@@ -1,13 +1,11 @@
 package com.f1diots.racedata.db.transformer;
 
 import com.f1diots.racedata.db.model.RaceSession;
-import com.f1diots.racedata.model.RaceData;
+import com.f1diots.racedata.task.model.RaceData;
 import com.fasterxml.jackson.annotation.JsonAutoDetect;
 import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.introspect.VisibilityChecker;
-import org.junit.Before;
-import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.platform.runner.JUnitPlatform;

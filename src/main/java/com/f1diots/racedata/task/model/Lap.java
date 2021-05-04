@@ -1,4 +1,4 @@
-package com.f1diots.racedata.model;
+package com.f1diots.racedata.task.model;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.AllArgsConstructor;
@@ -12,11 +12,11 @@ import java.util.List;
 @NoArgsConstructor
 @AllArgsConstructor
 @Data
-public class SessionResult {
-    @JsonProperty("bestlap")
-    private Long bestLap;
-
-    private Long[] bestSplits;
-    private boolean wet;
-    private List<LeaderBoardLine> leaderBoardLines;
+public class Lap {
+    private Long carId;
+    private Long driverIndex;
+    private Long laptime;
+    @JsonProperty("isValidForBest")
+    private Boolean validForBest;
+    private List<Long> splits;
 }

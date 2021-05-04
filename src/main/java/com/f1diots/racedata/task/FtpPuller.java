@@ -1,12 +1,9 @@
 package com.f1diots.racedata.task;
 
 import com.f1diots.racedata.db.RaceSessionRepository;
-import com.f1diots.racedata.db.model.Lap;
-import com.f1diots.racedata.db.model.LeaderBoardLine;
 import com.f1diots.racedata.db.model.RaceSession;
-import com.f1diots.racedata.db.model.SessionCar;
 import com.f1diots.racedata.db.transformer.RaceDataTransformer;
-import com.f1diots.racedata.model.RaceData;
+import com.f1diots.racedata.task.model.RaceData;
 import com.fasterxml.jackson.annotation.JsonAutoDetect;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.DeserializationFeature;

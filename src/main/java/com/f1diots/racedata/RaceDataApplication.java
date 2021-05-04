@@ -1,7 +1,9 @@
 package com.f1diots.racedata;
 
-import com.f1diots.racedata.model.AccCar;
-import com.f1diots.racedata.model.RaceData;
+import com.f1diots.racedata.db.RaceSessionRepository;
+import com.f1diots.racedata.db.model.RaceSession;
+import com.f1diots.racedata.task.model.AccCar;
+import com.f1diots.racedata.task.model.RaceData;
 import com.f1diots.racedata.task.FtpPuller;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -15,6 +17,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 
 @Log4j2
 @RestController
@@ -23,8 +26,8 @@ import java.util.Map;
 @SpringBootApplication
 public class RaceDataApplication {
 
-    //@Autowired
-    //private RaceDataRepository raceDataDb;
+    @Autowired
+    private RaceSessionRepository raceDataDb;
 
     @Autowired
     private FtpPuller ftpPuller;
@@ -38,16 +41,13 @@ public class RaceDataApplication {
     }
 
     @GetMapping(path = "/raceData", produces = MediaType.APPLICATION_JSON_VALUE)
-    List<RaceData> raceData(@RequestParam(defaultValue = "10") Integer limit, @RequestParam(defaultValue = "0") Integer offset) {
-        //return raceDataDb.getSessions(limit, offset).collectList().block();
-        return null;
+    List<RaceSession> raceData(@RequestParam(defaultValue = "10") Integer limit, @RequestParam(defaultValue = "0") Integer offset) {
+        return raceDataDb.findAll(); //TODO - paginate sort
     }
 
     @GetMapping(path = "/raceData/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
-    RaceData raceDataById(@PathVariable String id) {
-        RaceData raceData = getRaceData(id);
-        decorateRaceData(raceData);
-        return raceData;
+    RaceSession raceDataById(@PathVariable String id) {
+        return raceDataDb.findById(id).orElseThrow(NullPointerException::new);//TODO - throw a 404
     }
 
     private void decorateRaceData(RaceData raceData) {
