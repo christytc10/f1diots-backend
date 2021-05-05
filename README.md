@@ -1,5 +1,5 @@
 ####  Get sessions
-```/raceData?limit=10&offset=0```
+```/raceData?pageSize=2&page=0```
 Use limit and offset for pagination. Default sort is by descending timestamp (i.e. 
 the latest session would be page 1, result 1)
 
