@@ -1,0 +1,148 @@
+{
+  "sessionType": "FP",
+  "trackName": "kyalami_2020",
+  "sessionIndex": 0,
+  "raceWeekendIndex": 15,
+  "metaData": "kyalami_2020",
+  "serverName": "F1diots",
+  "sessionType": "FP",
+  "sessionResult": {
+    "bestlap": 105516,
+    "bestSplits": [
+      31941,
+      42165,
+      31410
+    ],
+    "isWetSession": 0,
+    "type": 0,
+    "leaderBoardLines": [
+      {
+        "car": {
+          "carId": 1001,
+          "raceNumber": 44,
+          "carModel": 24,
+          "cupCategory": 3,
+          "teamName": "",
+          "nationality": 0,
+          "carGuid": -1,
+          "teamGuid": -1,
+          "drivers": [
+            {
+              "firstName": "Shetland",
+              "lastName": "Soup",
+              "shortName": "SOU",
+              "playerId": "S76561198288441549"
+            }
+          ]
+        },
+        "currentDriver": {
+          "firstName": "Shetland",
+          "lastName": "Soup",
+          "shortName": "SOU",
+          "playerId": "S76561198288441549"
+        },
+        "currentDriverIndex": 0,
+        "timing": {
+          "lastLap": 107427,
+          "lastSplits": [
+            32121,
+            43059,
+            32247
+          ],
+          "bestLap": 105516,
+          "bestSplits": [
+            31941,
+            42165,
+            31410
+          ],
+          "totalTime": 289846139,
+          "lapCount": 7,
+          "lastSplitId": 1
+        },
+        "missingMandatoryPitstop": -1,
+        "driverTotalTimes": []
+      }
+    ]
+  },
+  "laps": [
+    {
+      "carId": 1001,
+      "driverIndex": 0,
+      "laptime": 220954,
+      "isValidForBest": false,
+      "splits": [
+        145954,
+        43233,
+        31767
+      ]
+    },
+    {
+      "carId": 1001,
+      "driverIndex": 0,
+      "laptime": 107142,
+      "isValidForBest": true,
+      "splits": [
+        33318,
+        42234,
+        31590
+      ]
+    },
+    {
+      "carId": 1001,
+      "driverIndex": 0,
+      "laptime": 106914,
+      "isValidForBest": true,
+      "splits": [
+        32037,
+        42525,
+        32352
+      ]
+    },
+    {
+      "carId": 1001,
+      "driverIndex": 0,
+      "laptime": 108414,
+      "isValidForBest": false,
+      "splits": [
+        32082,
+        43818,
+        32514
+      ]
+    },
+    {
+      "carId": 1001,
+      "driverIndex": 0,
+      "laptime": 105921,
+      "isValidForBest": true,
+      "splits": [
+        31941,
+        42363,
+        31617
+      ]
+    },
+    {
+      "carId": 1001,
+      "driverIndex": 0,
+      "laptime": 105516,
+      "isValidForBest": true,
+      "splits": [
+        31941,
+        42165,
+        31410
+      ]
+    },
+    {
+      "carId": 1001,
+      "driverIndex": 0,
+      "laptime": 107427,
+      "isValidForBest": true,
+      "splits": [
+        32121,
+        43059,
+        32247
+      ]
+    }
+  ],
+  "penalties": [],
+  "post_race_penalties": []
+}

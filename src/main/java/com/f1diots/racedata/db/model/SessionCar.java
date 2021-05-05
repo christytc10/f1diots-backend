@@ -1,24 +1,28 @@
-package com.f1diots.racedata.model;
+package com.f1diots.racedata.db.model;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import javax.persistence.*;
 import java.util.List;
 
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
 @Data
-public class  Car {
-    private int carId;
+@Entity
+@Table(name = "session_car")
+public class SessionCar {
+    @EmbeddedId
+    private SessionCarId sessionCarId;
     private int raceNumber;
-    private AccCar carDetails;
     private int carModel;
-    private int cupCategory; //TODO - map to enum?
+    private int cupCategory;
     private String teamName;
     private int carGuid;
     private int teamGuid;
-    private List<AccDriver> drivers;
+    @OneToMany(cascade = {CascadeType.ALL})
+    private List<Lap> laps;
 }

@@ -1,9 +1,10 @@
 package com.f1diots.racedata;
 
-import com.f1diots.racedata.db.RaceDataRepository;
-import com.f1diots.racedata.model.AccCar;
-import com.f1diots.racedata.model.RaceData;
+import com.f1diots.racedata.db.RaceSessionRepository;
+import com.f1diots.racedata.db.model.RaceSession;
 import com.f1diots.racedata.task.FtpPuller;
+import com.f1diots.racedata.task.model.AccCar;
+import com.f1diots.racedata.task.model.RaceData;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.SpringApplication;
@@ -25,7 +26,7 @@ import java.util.Map;
 public class RaceDataApplication {
 
     @Autowired
-    private RaceDataRepository raceDataDb;
+    private RaceSessionRepository raceDataDb;
 
     @Autowired
     private FtpPuller ftpPuller;
@@ -39,15 +40,13 @@ public class RaceDataApplication {
     }
 
     @GetMapping(path = "/raceData", produces = MediaType.APPLICATION_JSON_VALUE)
-    List<RaceData> raceData(@RequestParam(defaultValue = "10") Integer limit, @RequestParam(defaultValue = "0") Integer offset) {
-        return raceDataDb.getSessions(limit, offset).collectList().block();
+    List<RaceSession> raceData(@RequestParam(defaultValue = "10") Integer limit, @RequestParam(defaultValue = "0") Integer offset) {
+        return raceDataDb.findAll(); //TODO - paginate sort
     }
 
     @GetMapping(path = "/raceData/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
-    RaceData raceDataById(@PathVariable String id) {
-        RaceData raceData = getRaceData(id);
-        decorateRaceData(raceData);
-        return raceData;
+    RaceSession raceDataById(@PathVariable String id) {
+        return raceDataDb.findById(id).orElseThrow(NullPointerException::new);//TODO - throw a 404
     }
 
     private void decorateRaceData(RaceData raceData) {
@@ -63,9 +62,10 @@ public class RaceDataApplication {
             return cachedRaceData.get(id);
         }
         log.info("Missed cache. Getting Race Data From DB");
-        RaceData raceData = raceDataDb.findById(id).block();
-        cachedRaceData.putIfAbsent(id, raceData);
-        return raceData;
+        //RaceData raceData = raceDataDb.findById(id).block();
+        //cachedRaceData.putIfAbsent(id, raceData);
+        //return raceData;
+        return null;
     }
 
     public static void main(String[] args) {

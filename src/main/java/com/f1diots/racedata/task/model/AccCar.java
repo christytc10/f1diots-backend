@@ -1,4 +1,4 @@
-package com.f1diots.racedata.model;
+package com.f1diots.racedata.task.model;
 
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;

@@ -1,8 +1,9 @@
 package com.f1diots.racedata.task;
 
-import com.f1diots.racedata.db.RaceDataRepository;
-import com.f1diots.racedata.model.AccCar;
-import com.f1diots.racedata.model.RaceData;
+import com.f1diots.racedata.db.RaceSessionRepository;
+import com.f1diots.racedata.db.model.RaceSession;
+import com.f1diots.racedata.db.transformer.RaceDataTransformer;
+import com.f1diots.racedata.task.model.RaceData;
 import com.fasterxml.jackson.annotation.JsonAutoDetect;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.DeserializationFeature;
@@ -22,7 +23,10 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.text.SimpleDateFormat;
 import java.time.Instant;
-import java.util.*;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.Map;
+import java.util.Set;
 import java.util.stream.Collectors;
 
 @Component
@@ -45,7 +49,7 @@ public class FtpPuller {
     ObjectMapper mapper = new ObjectMapper();
 
     @Autowired
-    RaceDataRepository raceDataDb;
+    RaceSessionRepository raceSessionRepository;
 
     Set<String> knownIds = new HashSet<>();
 
@@ -65,7 +69,13 @@ public class FtpPuller {
                 if(!serverRaceData.getLaps().isEmpty()) {
                     serverRaceData.setId(k);
                     serverRaceData.setTimestamp(parseTimestamp(k));
-                    raceDataDb.save(serverRaceData).block();
+                    RaceSession raceSession = RaceDataTransformer.transform(serverRaceData);
+
+                    if(!raceSessionRepository.existsById(raceSession.getId())) {
+                        raceSessionRepository.save(raceSession);
+                    } else {
+                        log.info("{} already in DB", raceSession.getId());
+                    }
                 } else {
                     log.info("Session {} was empty.", k);
                 }
@@ -85,13 +95,14 @@ public class FtpPuller {
 
     private void populateIdCache() {
         log.info("Refreshing IDs from DB");
-        Set<String> idsFromDb = Objects.requireNonNull(raceDataDb.getSessionIds()
+        //FIXME
+        /*Set<String> idsFromDb = Objects.requireNonNull(raceDataDb.getSessionIds()
                 .collectList()
                 .block())
                 .stream()
                 .map(RaceData::getId)
                 .collect(Collectors.toSet());
-        knownIds.addAll(idsFromDb);
+        knownIds.addAll(idsFromDb);*/
     }
 
     private Map<String, String> getRaceDataFromFtp() {
@@ -113,7 +124,7 @@ public class FtpPuller {
                     }
                     if(knownIds.contains(id)){
                         log.info("{} already in DB", id);
-                        continue;
+                        //continue;
                     }
                     log.info("{} not in DB, saving...", id);
                 try {
