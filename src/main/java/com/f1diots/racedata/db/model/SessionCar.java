@@ -24,7 +24,5 @@ public class SessionCar {
     private int carGuid;
     private int teamGuid;
     @OneToMany(cascade = {CascadeType.ALL})
-    private List<AccDriver> drivers;
-    @OneToMany(cascade = {CascadeType.ALL})
     private List<Lap> laps;
 }

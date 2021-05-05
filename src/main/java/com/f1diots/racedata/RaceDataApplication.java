@@ -2,9 +2,9 @@ package com.f1diots.racedata;
 
 import com.f1diots.racedata.db.RaceSessionRepository;
 import com.f1diots.racedata.db.model.RaceSession;
+import com.f1diots.racedata.task.FtpPuller;
 import com.f1diots.racedata.task.model.AccCar;
 import com.f1diots.racedata.task.model.RaceData;
-import com.f1diots.racedata.task.FtpPuller;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.SpringApplication;
@@ -17,7 +17,6 @@ import org.springframework.web.bind.annotation.*;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.Optional;
 
 @Log4j2
 @RestController

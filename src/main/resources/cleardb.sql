@@ -1,7 +1,9 @@
-DELETE FROM driver;
-DELETE FROM session_leaderboard_line_laps;
-DELETE FROM lap;
-DELETE FROM session_leader_board_lines;
-DELETE FROM session_leaderboard_line;
-DELETE FROM session;
-DELETE FROM session_car;
+DROP TABLE session_car_drivers;
+DROP TABLE driver;
+DROP TABLE session_leaderboard_line_laps;
+DROP TABLE session_car_laps;
+DROP TABLE lap;
+DROP TABLE session_leader_board_lines;
+DROP TABLE session_leaderboard_line;
+DROP TABLE session;
+DROP TABLE session_car;

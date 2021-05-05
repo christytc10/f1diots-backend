@@ -23,7 +23,10 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.text.SimpleDateFormat;
 import java.time.Instant;
-import java.util.*;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.Map;
+import java.util.Set;
 import java.util.stream.Collectors;
 
 @Component
@@ -67,7 +70,12 @@ public class FtpPuller {
                     serverRaceData.setId(k);
                     serverRaceData.setTimestamp(parseTimestamp(k));
                     RaceSession raceSession = RaceDataTransformer.transform(serverRaceData);
-                    raceSessionRepository.save(raceSession);
+
+                    if(!raceSessionRepository.existsById(raceSession.getId())) {
+                        raceSessionRepository.save(raceSession);
+                    } else {
+                        log.info("{} already in DB", raceSession.getId());
+                    }
                 } else {
                     log.info("Session {} was empty.", k);
                 }

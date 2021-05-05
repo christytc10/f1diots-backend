@@ -1,6 +1,5 @@
 package com.f1diots.racedata.db.model;
 
-import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -20,9 +19,10 @@ public class Lap {
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
     private Long carId;
-    private Long driverIndex;
+    @ManyToOne(cascade = {CascadeType.MERGE})
+    private AccDriver driver;
     private Long lapTime;
-    @JsonProperty("isValidForBest")
     private Boolean validForBest;
-    //private List<Long> splits; //TODO - need a whole table for lap splits?
+    @Convert(converter = LapSplitsConverter.class)
+    private List<Long> splits;
 }
