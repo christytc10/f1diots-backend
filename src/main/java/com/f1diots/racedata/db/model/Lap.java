@@ -18,7 +18,6 @@ public class Lap {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
-    private Long carId;
     @ManyToOne(cascade = {CascadeType.MERGE})
     private AccDriver driver;
     private Long lapTime;

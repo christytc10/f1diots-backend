@@ -45,7 +45,6 @@ public class RaceDataTransformer {
             List<Lap> carLaps = raceData.getLaps().stream()
                     .filter(lap -> carId.equals(lap.getCarId()))
                     .map(lap -> Lap.builder()
-                            .carId(lap.getCarId())
                             .lapTime(lap.getLaptime())
                             .validForBest(lap.getValidForBest())
                             .driver(drivers.get(lap.getDriverIndex().intValue()))
