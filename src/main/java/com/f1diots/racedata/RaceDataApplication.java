@@ -17,6 +17,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.function.Function;
 
 @Log4j2
 @RestController
@@ -31,7 +32,7 @@ public class RaceDataApplication {
     @Autowired
     private FtpPuller ftpPuller;
 
-    private Map<String, RaceData> cachedRaceData = new HashMap<>();
+    private Map<String, RaceSession> cachedRaceData = new HashMap<>();
 
     @RequestMapping("/")
     @ResponseBody
@@ -56,16 +57,8 @@ public class RaceDataApplication {
         });
     }
 
-    private RaceData getRaceData(String id) {
-        if (cachedRaceData.containsKey(id)){
-            log.info("Hit cache. Returning Race Data for {} From cache", id);
-            return cachedRaceData.get(id);
-        }
-        log.info("Missed cache. Getting Race Data From DB");
-        //RaceData raceData = raceDataDb.findById(id).block();
-        //cachedRaceData.putIfAbsent(id, raceData);
-        //return raceData;
-        return null;
+    private RaceSession getRaceData(String id) {
+        return cachedRaceData.computeIfAbsent(id, k -> raceDataDb.findById(k).orElse(null));
     }
 
     public static void main(String[] args) {
