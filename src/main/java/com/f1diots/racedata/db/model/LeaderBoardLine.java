@@ -6,6 +6,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
+import java.util.List;
 
 @Builder
 @NoArgsConstructor
@@ -14,10 +15,14 @@ import javax.persistence.*;
 @Entity
 @Table(name = "session_leaderboard_line")
 public class LeaderBoardLine {
-    @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
-    private Long id;
-
-    @OneToOne(cascade = {CascadeType.ALL})
-    private SessionCar car;
+    @EmbeddedId
+    private SessionCarId sessionCarId;
+    private int raceNumber;
+    private int carModel;
+    private int cupCategory;
+    private String teamName;
+    private int carGuid;
+    private int teamGuid;
+    @OneToMany(cascade = {CascadeType.ALL})
+    private List<Lap> laps;
 }

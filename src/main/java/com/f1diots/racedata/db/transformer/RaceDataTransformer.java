@@ -52,7 +52,7 @@ public class RaceDataTransformer {
                             .splits(lap.getSplits())
                             .build())
                     .collect(Collectors.toList());
-            SessionCar car = SessionCar.builder()
+            return LeaderBoardLine.builder()
                     .sessionCarId(SessionCarId.builder().carId(carId.intValue()).sessionId(sessionId).build())
                     .laps(carLaps)
                     .carGuid(lbl.getCar().getCarGuid())
@@ -62,7 +62,6 @@ public class RaceDataTransformer {
                     .teamGuid(lbl.getCar().getTeamGuid())
                     .teamName(lbl.getCar().getTeamName())
                     .build();
-            return LeaderBoardLine.builder().car(car).build();
         }).collect(Collectors.toList());
     }
 }
