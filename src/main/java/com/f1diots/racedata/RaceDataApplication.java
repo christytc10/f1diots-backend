@@ -10,6 +10,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.cache.annotation.EnableCaching;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.http.MediaType;
 import org.springframework.scheduling.annotation.EnableScheduling;
 import org.springframework.web.bind.annotation.*;
@@ -41,8 +44,9 @@ public class RaceDataApplication {
     }
 
     @GetMapping(path = "/raceData", produces = MediaType.APPLICATION_JSON_VALUE)
-    List<RaceSession> raceData(@RequestParam(defaultValue = "10") Integer limit, @RequestParam(defaultValue = "0") Integer offset) {
-        return raceDataDb.findAll(); //TODO - paginate sort
+    List<RaceSession> raceData(@RequestParam(defaultValue = "10") Integer pageSize, @RequestParam(defaultValue = "0") Integer page) {
+        Pageable pageable = PageRequest.of(page, pageSize, Sort.by("timestamp").descending());
+        return raceDataDb.findAll(pageable).getContent();
     }
 
     @GetMapping(path = "/raceData/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
