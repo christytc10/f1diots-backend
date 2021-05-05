@@ -1,7 +1,6 @@
 ####  Get sessions
 ```/raceData?pageSize=2&page=0```
-Use limit and offset for pagination. Default sort is by descending timestamp (i.e. 
-the latest session would be page 1, result 1)
+page is 0 indexed. Default sort is by descending timestamp
 
 ####  Get specific session
 ```/raceData/210422_233453_FP```
