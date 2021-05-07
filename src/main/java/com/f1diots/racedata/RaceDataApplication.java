@@ -17,6 +17,7 @@ import org.springframework.http.MediaType;
 import org.springframework.scheduling.annotation.EnableScheduling;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -53,15 +54,9 @@ public class RaceDataApplication {
         return raceDataDb.findById(id).orElseThrow(NullPointerException::new);//TODO - throw a 404
     }
 
-    private void decorateRaceData(RaceData raceData) {
-        raceData.getSessionResult().getLeaderBoardLines().forEach(leaderBoardLine -> {
-            int carModel = leaderBoardLine.getCar().getCarModel();
-            leaderBoardLine.getCar().setCarDetails(AccCar.byId(carModel));
-        });
-    }
-
-    private RaceSession getRaceData(String id) {
-        return cachedRaceData.computeIfAbsent(id, k -> raceDataDb.findById(k).orElse(null));
+    @GetMapping(path = "/cars", produces = MediaType.APPLICATION_JSON_VALUE)
+    List<AccCar> cars() {
+        return Arrays.asList(AccCar.values());
     }
 
     public static void main(String[] args) {
