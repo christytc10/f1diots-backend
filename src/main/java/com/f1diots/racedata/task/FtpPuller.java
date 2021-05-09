@@ -130,7 +130,7 @@ public class FtpPuller {
                     log.info("{} not in DB, saving...", id);
                 try {
                     InputStream stream = ftpClient.retrieveFileStream(remoteDir + filename);
-                    String result = new BufferedReader(new InputStreamReader(stream, StandardCharsets.UTF_16LE)).lines().collect(Collectors.joining(""));
+                    String result = new BufferedReader(new InputStreamReader(stream)).lines().collect(Collectors.joining(""));
                     raceData.put(id, result.replaceAll("[\\x00-\\x09\\x11\\x12\\x14-\\x1F\\x7F]", ""));
                 } finally {
                     ftpClient.completePendingCommand();
