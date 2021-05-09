@@ -18,7 +18,8 @@ public class LeaderBoardLine {
     @EmbeddedId
     private SessionCarId sessionCarId;
     private int raceNumber;
-    private int carModel;
+    @ManyToOne(cascade = {CascadeType.MERGE})
+    private AccCar carModel;
     private int cupCategory;
     private String teamName;
     private int carGuid;

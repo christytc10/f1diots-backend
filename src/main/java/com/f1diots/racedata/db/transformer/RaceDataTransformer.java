@@ -1,6 +1,7 @@
 package com.f1diots.racedata.db.transformer;
 
 import com.f1diots.racedata.db.model.*;
+import com.f1diots.racedata.task.model.Car;
 import com.f1diots.racedata.task.model.RaceData;
 
 import java.util.HashMap;
@@ -51,11 +52,12 @@ public class RaceDataTransformer {
                             .splits(lap.getSplits())
                             .build())
                     .collect(Collectors.toList());
+            com.f1diots.racedata.task.model.AccCar car = com.f1diots.racedata.task.model.AccCar.byId(lbl.getCar().getCarModel());
             return LeaderBoardLine.builder()
                     .sessionCarId(SessionCarId.builder().carId(carId.intValue()).sessionId(sessionId).build())
                     .laps(carLaps)
                     .carGuid(lbl.getCar().getCarGuid())
-                    .carModel(lbl.getCar().getCarModel())
+                    .carModel(AccCar.builder().id(car.getId()).carClass(car.getCarClass()).name(car.getName()).year(car.getYear()).build())
                     .cupCategory(lbl.getCar().getCupCategory())
                     .raceNumber(lbl.getCar().getRaceNumber())
                     .teamGuid(lbl.getCar().getTeamGuid())
