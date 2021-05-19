@@ -19,7 +19,7 @@ public class AccCarSerializer extends StdSerializer<AccCar> {
 
     public void serialize(
             AccCar distance, JsonGenerator generator, SerializerProvider provider)
-      throws IOException, JsonProcessingException {
+      throws IOException {
         generator.writeStartObject();
         generator.writeFieldName("id");
         generator.writeNumber(distance.getId());

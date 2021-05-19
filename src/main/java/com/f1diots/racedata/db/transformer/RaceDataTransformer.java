@@ -1,7 +1,6 @@
 package com.f1diots.racedata.db.transformer;
 
 import com.f1diots.racedata.db.model.*;
-import com.f1diots.racedata.task.model.Car;
 import com.f1diots.racedata.task.model.RaceData;
 
 import java.util.HashMap;
@@ -15,7 +14,7 @@ public class RaceDataTransformer {
     }
 
     public static RaceSession transform(RaceData raceData) {
-        final RaceSession raceSession = RaceSession.builder()
+        return RaceSession.builder()
                 .id(raceData.getId())
                 .sessionType(raceData.getSessionType())
                 .timestamp(raceData.getTimestamp())
@@ -23,7 +22,6 @@ public class RaceDataTransformer {
                 .wet(raceData.getSessionResult().isWet())
                 .leaderBoardLines(buildLeaderBoardLines(raceData))
                 .build();
-        return raceSession;
     }
 
     private static List<LeaderBoardLine> buildLeaderBoardLines(RaceData raceData) {

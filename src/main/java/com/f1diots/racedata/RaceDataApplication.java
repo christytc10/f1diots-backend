@@ -4,7 +4,6 @@ import com.f1diots.racedata.db.RaceSessionRepository;
 import com.f1diots.racedata.db.model.RaceSession;
 import com.f1diots.racedata.task.FtpPuller;
 import com.f1diots.racedata.task.model.AccCar;
-import com.f1diots.racedata.task.model.RaceData;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.SpringApplication;

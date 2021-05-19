@@ -12,6 +12,7 @@ import org.junit.platform.runner.JUnitPlatform;
 import org.junit.runner.RunWith;
 
 import java.io.File;
+import java.util.Objects;
 
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.collection.IsCollectionWithSize.hasSize;
@@ -30,7 +31,7 @@ class RaceDataTransformerTest {
     @Test
     public void testTransform() throws Exception {
         ClassLoader classLoader = this.getClass().getClassLoader();
-        File testFile = new File(classLoader.getResource("testracedata.json").getFile());
+        File testFile = new File(Objects.requireNonNull(classLoader.getResource("testracedata.json")).getFile());
 
         RaceData raceData = objectMapper.readValue(testFile, RaceData.class);
         RaceSession sessionData = RaceDataTransformer.transform(raceData);

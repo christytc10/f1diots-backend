@@ -48,12 +48,12 @@ public class FtpPuller {
     @Value("${race.data.ftp.remoteDir}")
     String remoteDir;
 
-    ObjectMapper mapper = new ObjectMapper();
+    final ObjectMapper mapper = new ObjectMapper();
 
     @Autowired
     RaceSessionRepository raceSessionRepository;
 
-    Set<String> knownIds = new HashSet<>();
+    final Set<String> knownIds = new HashSet<>();
 
     @Scheduled(fixedRate = 60000 * 5) //Every 5 minutes
     public void pullServerResults() {

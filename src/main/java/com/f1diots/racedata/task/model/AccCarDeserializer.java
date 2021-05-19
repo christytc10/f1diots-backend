@@ -16,7 +16,7 @@ public class AccCarDeserializer extends StdDeserializer<AccCar> {
 
     @Override
     public AccCar deserialize(JsonParser jsonParser, DeserializationContext ctxt)
-      throws IOException, JsonProcessingException {
+      throws IOException {
         JsonNode node = jsonParser.getCodec().readTree(jsonParser);
         int id = node.get("id").asInt();
         return AccCar.byId(id);
