@@ -24,6 +24,7 @@ import java.io.InputStreamReader;
 import java.nio.charset.StandardCharsets;
 import java.text.SimpleDateFormat;
 import java.time.Instant;
+import java.util.Collection;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map;
@@ -56,7 +57,7 @@ public class FtpPuller {
 
     @Scheduled(fixedRate = 60000 * 5) //Every 5 minutes
     public void pullServerResults() {
-        if(knownIds.isEmpty()) {
+        if (knownIds.isEmpty()) {
             populateIdCache();
         }
         mapper.disable(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES);
@@ -67,16 +68,11 @@ public class FtpPuller {
             RaceData serverRaceData;
             try {
                 serverRaceData = mapper.readValue(raceData.get(k), RaceData.class);
-                if(!serverRaceData.getLaps().isEmpty()) {
+                if (!serverRaceData.getLaps().isEmpty()) {
                     serverRaceData.setId(k);
                     serverRaceData.setTimestamp(parseTimestamp(k));
                     RaceSession raceSession = RaceDataTransformer.transform(serverRaceData);
-
-                    if(!raceSessionRepository.existsById(raceSession.getId())) {
-                        raceSessionRepository.save(raceSession);
-                    } else {
-                        log.info("{} already in DB", raceSession.getId());
-                    }
+                    raceSessionRepository.save(raceSession);
                 } else {
                     log.info("Session {} was empty.", k);
                 }
@@ -96,14 +92,8 @@ public class FtpPuller {
 
     private void populateIdCache() {
         log.info("Refreshing IDs from DB");
-        //FIXME
-        /*Set<String> idsFromDb = Objects.requireNonNull(raceDataDb.getSessionIds()
-                .collectList()
-                .block())
-                .stream()
-                .map(RaceData::getId)
-                .collect(Collectors.toSet());
-        knownIds.addAll(idsFromDb);*/
+        Collection<String> ids = raceSessionRepository.findAllIds();
+        knownIds.addAll(ids);
     }
 
     private Map<String, String> getRaceDataFromFtp() {
@@ -117,17 +107,17 @@ public class FtpPuller {
             FTPFile[] fileList = ftpClient.listFiles(remoteDir);
             for (FTPFile ftpFile : fileList) {
 
-                    String filename = ftpFile.getName();
-                    String id = filename.substring(0, filename.lastIndexOf("."));
-                    if (!filename.substring(filename.lastIndexOf(".")).equals(".json")) {
-                        // ignore any non-json files
-                        continue;
-                    }
-                    if(knownIds.contains(id)){
-                        log.info("{} already in DB", id);
-                        //continue;
-                    }
-                    log.info("{} not in DB, saving...", id);
+                String filename = ftpFile.getName();
+                String id = filename.substring(0, filename.lastIndexOf("."));
+                if (!filename.substring(filename.lastIndexOf(".")).equals(".json")) {
+                    // ignore any non-json files
+                    continue;
+                }
+                if (knownIds.contains(id)) {
+                    log.info("{} already in DB", id);
+                    continue;
+                }
+                log.info("{} not in DB, saving...", id);
                 try {
                     InputStream stream = ftpClient.retrieveFileStream(remoteDir + filename);
                     String result = new BufferedReader(new InputStreamReader(stream, StandardCharsets.UTF_16LE)).lines().collect(Collectors.joining(""));
