@@ -51,6 +51,15 @@ public class RaceDataTransformer {
                             .build())
                     .collect(Collectors.toList());
             com.f1diots.racedata.task.model.AccCar car = com.f1diots.racedata.task.model.AccCar.byId(lbl.getCar().getCarModel());
+
+            int rank = 0;
+            if (raceData.getSessionType().equals("R")) {
+                List<Long> times = raceData.getSessionResult().getLeaderBoardLines().stream().map(line -> line.getTiming().getTotalTime()).sorted().collect(Collectors.toList());
+                rank = times.indexOf(lbl.getTiming().getTotalTime()) + 1;
+            } else if (raceData.getSessionType().equals("Q")) {
+                List<Long> times = raceData.getSessionResult().getLeaderBoardLines().stream().map(line -> line.getTiming().getBestLap()).sorted().collect(Collectors.toList());
+                rank = times.indexOf(lbl.getTiming().getBestLap()) + 1;
+            }
             return LeaderBoardLine.builder()
                     .sessionCarId(SessionCarId.builder().carId(carId.intValue()).sessionId(sessionId).build())
                     .laps(carLaps)
@@ -60,6 +69,7 @@ public class RaceDataTransformer {
                     .raceNumber(lbl.getCar().getRaceNumber())
                     .teamGuid(lbl.getCar().getTeamGuid())
                     .teamName(lbl.getCar().getTeamName())
+                    .rank(rank)
                     .build();
         }).collect(Collectors.toList());
     }

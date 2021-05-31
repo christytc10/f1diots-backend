@@ -26,4 +26,5 @@ public class LeaderBoardLine {
     private int teamGuid;
     @OneToMany(cascade = {CascadeType.ALL})
     private List<Lap> laps;
+    private Integer rank;
 }
