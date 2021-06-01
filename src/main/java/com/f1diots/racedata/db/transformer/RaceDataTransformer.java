@@ -63,16 +63,15 @@ public class RaceDataTransformer {
                                         .thenComparing((com.f1diots.racedata.task.model.LeaderBoardLine l) -> l.getTiming().getTotalTime()))
                         .map(line -> line.getCar().getRaceNumber())
                         .collect(Collectors.toList());
-                rank = ranked.indexOf(lbl.getCar().getRaceNumber());
+                rank = ranked.indexOf(lbl.getCar().getRaceNumber()) + 1;
             } else if (raceData.getSessionType().equals("Q")) {
                 List<Integer> ranked = raceData.getSessionResult().getLeaderBoardLines().stream()
                         .filter(l -> l.getTiming().getLapCount() > 0)
                         .sorted(Comparator.comparing((com.f1diots.racedata.task.model.LeaderBoardLine l) -> l.getTiming().getBestLap()))
                         .map(line -> line.getCar().getRaceNumber())
                         .collect(Collectors.toList());
-                rank = ranked.indexOf(lbl.getCar().getRaceNumber());
+                rank = ranked.indexOf(lbl.getCar().getRaceNumber()) + 1;
             }
-            if (rank < 0) { rank = 0; }
 
             return LeaderBoardLine.builder()
                     .sessionCarId(SessionCarId.builder().carId(carId.intValue()).sessionId(sessionId).build())
