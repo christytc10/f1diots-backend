@@ -3,10 +3,12 @@ package com.f1diots.racedata.db.transformer;
 import com.f1diots.racedata.db.model.*;
 import com.f1diots.racedata.task.model.RaceData;
 
+import java.util.Comparator;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 public class RaceDataTransformer {
     private RaceDataTransformer() {
@@ -54,12 +56,24 @@ public class RaceDataTransformer {
 
             int rank = 0;
             if (raceData.getSessionType().equals("R")) {
-                List<Long> times = raceData.getSessionResult().getLeaderBoardLines().stream().map(line -> line.getTiming().getTotalTime()).sorted().collect(Collectors.toList());
-                rank = times.indexOf(lbl.getTiming().getTotalTime()) + 1;
+                List<Integer> ranked = raceData.getSessionResult().getLeaderBoardLines().stream()
+                        .filter(l -> l.getTiming().getLapCount() > 0)
+                        .sorted(
+                                Comparator.comparing((com.f1diots.racedata.task.model.LeaderBoardLine l) -> l.getTiming().getLapCount()).reversed()
+                                        .thenComparing((com.f1diots.racedata.task.model.LeaderBoardLine l) -> l.getTiming().getTotalTime()))
+                        .map(line -> line.getCar().getRaceNumber())
+                        .collect(Collectors.toList());
+                rank = ranked.indexOf(lbl.getCar().getRaceNumber());
             } else if (raceData.getSessionType().equals("Q")) {
-                List<Long> times = raceData.getSessionResult().getLeaderBoardLines().stream().map(line -> line.getTiming().getBestLap()).sorted().collect(Collectors.toList());
-                rank = times.indexOf(lbl.getTiming().getBestLap()) + 1;
+                List<Integer> ranked = raceData.getSessionResult().getLeaderBoardLines().stream()
+                        .filter(l -> l.getTiming().getLapCount() > 0)
+                        .sorted(Comparator.comparing((com.f1diots.racedata.task.model.LeaderBoardLine l) -> l.getTiming().getBestLap()))
+                        .map(line -> line.getCar().getRaceNumber())
+                        .collect(Collectors.toList());
+                rank = ranked.indexOf(lbl.getCar().getRaceNumber());
             }
+            if (rank < 0) { rank = 0; }
+
             return LeaderBoardLine.builder()
                     .sessionCarId(SessionCarId.builder().carId(carId.intValue()).sessionId(sessionId).build())
                     .laps(carLaps)
