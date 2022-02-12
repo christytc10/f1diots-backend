@@ -21,3 +21,4 @@ jobs:
         url: 'https://f1diots-backend.herokuapp.com/'
         method: 'GET'
         timeout: 90000
+        preventFailureOnNoResponse: true
