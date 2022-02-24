@@ -24,6 +24,7 @@ INSERT INTO car (id,car_class,name,year) VALUES (22,'GT3', 'McLaren 720S GT3',20
 INSERT INTO car (id,car_class,name,year) VALUES (23,'GT3', 'Porsche 911 II GT3 R',2019) ON CONFLICT (id) DO NOTHING;
 INSERT INTO car (id,car_class,name,year) VALUES (24,'GT3', 'Ferrari 488 GT3 Evo',2020) ON CONFLICT (id) DO NOTHING;
 INSERT INTO car (id,car_class,name,year) VALUES (25,'GT3', 'Mercedes-AMG GT3',2020) ON CONFLICT (id) DO NOTHING;
+INSERT INTO car (id,car_class,name,year) VALUES (30,'GT3', 'BMW M4 GT3',2022) ON CONFLICT (id) DO NOTHING;
 INSERT INTO car (id,car_class,name,year) VALUES (50,'GT4', 'Alpine A110 GT4',2018) ON CONFLICT (id) DO NOTHING;
 INSERT INTO car (id,car_class,name,year) VALUES (51,'GT4', 'Aston Martin Vantage GT4',2018) ON CONFLICT (id) DO NOTHING;
 INSERT INTO car (id,car_class,name,year) VALUES (52,'GT4', 'Audi R8 LMS GT4',2018) ON CONFLICT (id) DO NOTHING;
