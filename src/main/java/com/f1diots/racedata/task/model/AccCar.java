@@ -41,7 +41,7 @@ public enum AccCar {
     ASTON_MARTIN_VANTAGE_GT4("Aston Martin Vantage GT4",2018,"GT4",51),
     AUDI_R8_LMS_GT4("Audi R8 LMS GT4",2018,"GT4",52),
     BMW_M4_GT4("BMW M4 GT4",2018,"GT4",53),
-    CAR_FIFTY_FOUR("Car 54 Where are you?",1961,"GT4",54),
+    BMW_M4_GT3("BMW M4 GT3",2022,"GT3",54),
     CHEVROLET_CAMARO_GT4("Chevrolet Camaro GT4",2017,"GT4",55),
     GINETTA_G55_GT4("Ginetta G55 GT4",2012,"GT4",56),
     KTM_X_BOW_GT4("KTM X-Bow GT4",2016,"GT4",57),
